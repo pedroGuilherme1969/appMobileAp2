@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'adopt'  # Adicionando o parâmetro distribution
 
       - name: Set JAVA_HOME
         run: echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
