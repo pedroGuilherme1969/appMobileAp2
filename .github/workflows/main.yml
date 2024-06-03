@@ -1,7 +1,6 @@
 name: CI
 
 on:
-
   push:
     branches: [ "main" ]
   pull_request:
@@ -12,15 +11,19 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checar o código
-        uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v2
 
-      - name: Executar Lint
-        uses: ./gradlew lintDebug
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
 
-      - name: Gerar Relatório HTML
-        uses: actions/upload-artifact@v4
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      - name: Generate HTML Report
+        uses: actions/upload-artifact@v2
         with:
           name: index.html
           path: app/build/reports/lint-results-debug.html
-
