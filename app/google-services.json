@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "801695525173",
+    "project_id": "neweracut-s",
+    "storage_bucket": "neweracut-s.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801695525173:android:39f85b8ca609b6964b847c",
+        "android_client_info": {
+          "package_name": "com.example.barbershopap2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbi3STpYocnqG9-oTr_aS-x5saBySaS3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
