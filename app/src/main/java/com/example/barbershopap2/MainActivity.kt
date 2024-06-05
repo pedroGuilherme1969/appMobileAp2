@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 }senha.isEmpty() -> {
                     mensagem(it, "Preencha a sua senha.")
                 }senha.length <=5 -> {
-                    mensagem(it, "A senha precisa ter pelo menos 8 caracteres")
+                    mensagem(it, "A senha precisa ter pelo menos 6 caracteres")
                 }else ->{
                     navegarPraHome(nome)
                 }
