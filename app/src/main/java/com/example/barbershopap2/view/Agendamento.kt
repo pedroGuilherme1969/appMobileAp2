@@ -64,7 +64,7 @@ class Agendamento : AppCompatActivity() {
         }
         binding.timePicker.setIs24HourView(true)
 
-        binding.btAgendar.setOnClickListener {
+        binding.btAgendamento.setOnClickListener {
             val barbeiro1 = binding.barbeiro1
             val barbeiro2 = binding.barbeiro2
             val barbeiro3 = binding.barbeiro3
