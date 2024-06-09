@@ -59,7 +59,7 @@ jobs:
 
 
   instrumentation-test:
-    needs: [unit-test]
+    needs: [ unit-test ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -75,7 +75,7 @@ jobs:
         run: java -version
 
       - name: Run espresso tests
-        uses: reactivecircus/android-emulator-runner@v4
+        uses: reactivecircus/android-emulator-runner@v3
         with:
           api-level: 29
           script: ./gradlew connectedCheck
@@ -85,3 +85,4 @@ jobs:
         with:
           name: instrumentation_test.report
           path: app/build/reports/androidTests/connected/
+
