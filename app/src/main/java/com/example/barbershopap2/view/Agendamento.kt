@@ -1,6 +1,5 @@
 package com.example.barbershopap2.view
 
-
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +17,7 @@ class Agendamento : AppCompatActivity() {
     private val calendar: Calendar = Calendar.getInstance()
     private var data: String = ""
     private var hora: String = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,37 +29,31 @@ class Agendamento : AppCompatActivity() {
 
         val datePicker = binding.datePicker
         datePicker.setOnDateChangedListener { _, year, monthOfYear, dayOfMonth ->
-
-            calendar.set(Calendar.YEAR,year)
-            calendar.set(Calendar.MONTH,monthOfYear)
-            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
             var dia = dayOfMonth.toString()
             val mes: String
 
-            if (dayOfMonth < 10){
+            if (dayOfMonth < 10) {
                 dia = "0$dayOfMonth"
-
             }
-            if (monthOfYear < 10){
-                mes = "" + (monthOfYear+1)
-            }else {
-                mes = (monthOfYear +1).toString()
+            mes = if (monthOfYear < 10) {
+                "" + (monthOfYear + 1)
+            } else {
+                (monthOfYear + 1).toString()
             }
 
             data = "$dia / $mes / $year"
         }
 
         binding.timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
-
-            val minuto: String
-
-            if (minute < 10){
-                minuto = "0$minute"
-            }else{
-                minuto = minute.toString()
+            val minuto: String = if (minute < 10) {
+                "0$minute"
+            } else {
+                minute.toString()
             }
-
             hora = "$hourOfDay:$minuto"
         }
         binding.timePicker.setIs24HourView(true)
@@ -73,20 +67,20 @@ class Agendamento : AppCompatActivity() {
                 hora.isEmpty() -> {
                     mensagem(it, "Escolha um horário", "#FF0000")
                 }
-                hora < "8:00" && hora > "19:00" -> {
+                hora < "08:00" || hora > "19:00" -> {
                     mensagem(it, "Barbearia fechada - Horário de funcionamento das 08:00 as 19:00!", "#FF0000")
                 }
                 data.isEmpty() -> {
                     mensagem(it, "Escolha uma data", "#FF0000")
                 }
                 barbeiro1.isChecked && data.isNotEmpty() && hora.isNotEmpty() -> {
-                    salvarAgendamento(it, nome, "Henrique Soares", data,hora)
+                    salvarAgendamento(it, nome, "Henrique Soares", data, hora)
                 }
                 barbeiro2.isChecked && data.isNotEmpty() && hora.isNotEmpty() -> {
-                    salvarAgendamento(it, nome, "Pedro Guilherme", data,hora)
+                    salvarAgendamento(it, nome, "Pedro Guilherme", data, hora)
                 }
                 barbeiro3.isChecked && data.isNotEmpty() && hora.isNotEmpty() -> {
-                    salvarAgendamento(it, nome, "Vinicius Maximo", data,hora)
+                    salvarAgendamento(it, nome, "Vinicius Maximo", data, hora)
                 }
                 else -> {
                     mensagem(it, "Escolha um barbeiro", "#FF0000")
@@ -102,7 +96,7 @@ class Agendamento : AppCompatActivity() {
         snackbar.show()
     }
 
-    private fun salvarAgendamento(view: View, cliente: String, barbeiro: String, data: String, hora: String){
+    private fun salvarAgendamento(view: View, cliente: String, barbeiro: String, data: String, hora: String) {
         val db = FirebaseFirestore.getInstance()
 
         val dadosUsuario = hashMapOf(
@@ -113,11 +107,9 @@ class Agendamento : AppCompatActivity() {
         )
 
         db.collection("agendamento").document(cliente).set(dadosUsuario).addOnCompleteListener {
-            mensagem(view, "Agendamento realizado com sucerro!", "#FF03DAC5")
+            mensagem(view, "Agendamento realizado com sucesso!", "#FF03DAC5")
         }.addOnFailureListener {
             mensagem(view, "O agendamento não pode ser concluído, erro no servidor ://", "FF0000")
         }
     }
-
-
 }
