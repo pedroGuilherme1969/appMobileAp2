@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -112,3 +112,38 @@ jobs:
         with:
           name: barber-shop.apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+  deploy:
+    needs: [package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Firebase CLI
+        run: curl -sL https://firebase.tools | bash
+
+      - name: Decrypt Firebase service account
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: echo $FIREBASE_SERVICE_ACCOUNT > ${HOME}/firebase-service-account.json
+
+      - name: Authenticate to Firebase
+        run: firebase auth:login:ci --token "$(cat ${HOME}/firebase-service-account.json | jq -r .token)"
+
+      - name: Run tests on Firebase Test Lab
+        run: |
+          firebase test android run \
+            --type instrumentation \
+            --app app/build/outputs/apk/debug/app-debug.apk \
+            --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=Pixel2,version=28,locale=en,orientation=portrait
+
+      - name: Deploy to Firebase App Distribution
+        if: success()
+        env:
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        run: |
+          firebase appdistribution:distribute app/build/outputs/apk/debug/app-debug.apk \
+            --app $FIREBASE_APP_ID \
+            --groups testers
