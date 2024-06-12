@@ -111,26 +111,26 @@ jobs:
           name: barber-shop.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-deploy:
-  needs: [package]
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout the code
-      uses: actions/checkout@v4
+  deploy:
+    needs: [package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
 
-    # Restante dos passos para configurar o ambiente e construir o APK...
+      # Restante dos passos para configurar o ambiente e construir o APK...
 
-    - name: Install Firebase CLI
-      run: npm install -g firebase-tools
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
 
-    - name: Authenticate to Firebase
-      env:
-        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      run: |
-        echo $FIREBASE_SERVICE_ACCOUNT > ${HOME}/firebase-service-account.json
-        gcloud auth activate-service-account --key-file=${HOME}/firebase-service-account.json
-        gcloud config set project $(cat ${HOME}/firebase-service-account.json | jq -r .project_id)
+      - name: Authenticate to Firebase
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo $FIREBASE_SERVICE_ACCOUNT > ${HOME}/firebase-service-account.json
+          gcloud auth activate-service-account --key-file=${HOME}/firebase-service-account.json
+          gcloud config set project $(cat ${HOME}/firebase-service-account.json | jq -r .project_id)
 
-    - name: Run Firebase Test Lab
-      run: firebase test android run ~/Downloads/neweracut-s-firebase-adminsdk-szuk0-ad67938a02.json
+      - name: Run Firebase Test Lab
+        run: firebase test android run ~/Downloads/neweracut-s-firebase-adminsdk-szuk0-ad67938a02.json
 
